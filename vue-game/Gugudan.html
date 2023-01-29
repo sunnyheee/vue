@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gogodan</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="root">
+      <div>{{first}} X {{second}} ?</div>
+      <form v-on:submit="onSubmitForm">
+        <input type="number" ref="answer" v-model="value" />
+        <button>enter</button>
+      </form>
+      <div id="result">{{result}}</div>
+    </div>
+    <script>
+      const app = new Vue({
+        el: "#root",
+        data: {
+          first: Math.ceil(Math.random() * 9),
+          second: Math.ceil(Math.random() * 9),
+          value: "",
+          result: "",
+        },
+        methods: {
+          onSubmitForm(e) {
+            e.preventDefault();
+            console.log(this);
+            console.log(this.first * this.second === this.value);
+
+            if (this.first * parseInt(this.second) === parseInt(this.value)) {
+              this.result = "You are Correct";
+              this.first = Math.ceil(Math.random() * 9);
+              this.second = Math.ceil(Math.random() * 9);
+              this.value = "";
+              this.$refs.answer.focus();
+            } else {
+              this.result = "You are Incorrect";
+              this.value = "";
+              this.$refs.answer.focus();
+            }
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
