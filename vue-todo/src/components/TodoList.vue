@@ -1,9 +1,14 @@
 <template>
   <div>
     <ul>
-      <li  v-for="(todoItems,index) in todoItems" v-bind:key="todoItems" class="shadow">
-        {{ todoItems }}
-        <span class="removeBtn" v-on:click="removeTodo(todoItems,index)">delete</span>
+      <li  v-for="(todoItem,index) in todoItems" v-bind:key="todoItem.item" class="shadow">
+        <p class="checkBtn" 
+          v-bind:class="{checkBtnCompleted:todoItem.completed}" 
+          v-on:click="toggleComplte(todoItem,index)">
+          check
+        </p>
+        <span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
+        <span class="removeBtn" v-on:click="removeTodo(todoItem,index)">delete</span>
       </li>
     </ul>
   </div>
@@ -17,17 +22,26 @@ export default {
     }
   },
   methods: {
-    removeTodo: function(todoItems, index ){
-      console.log(todoItems, index);
-      localStorage.removeItem(todoItems)
+    removeTodo: function(todoItem, index ){
+      console.log(todoItem, index);
+      localStorage.removeItem(todoItem)
       this.todoItems.splice(index, 1)
+    },
+    toggleComplte: function(todoItem,index){
+      console.log(todoItem, index);
+      todoItem.completed = !todoItem.completed;
+      // localStorage deta update
+      localStorage.removeItem(todoItem.item)
+      localStorage.setItem(todoItem.item, JSON.stringify(todoItem))
     }
   },
   created: function(){
     if(localStorage.length > 0){
       for(var i = 0; i < localStorage.length; i++){
         if(localStorage.key(i) !== "logolevel:webpack-dev-server")
-        this.todoItems.push(localStorage.key(i))
+        this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))))
+        console.log(JSON.parse(localStorage.getItem(localStorage.key(i))));
+        // this.todoItems.push(localStorage.key(i))
         // console.log(localStorage.key(i));
       }
     }  
@@ -35,7 +49,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 ul {
   list-style-type: none;
   padding-left: 0px;
@@ -52,10 +66,13 @@ li {
   background:#fff;
   border-radius: 5px;
 }
-.ckeckBtn {
-  line-height: 45px;
+.checkBtn {
+  line-height: 18px;
   color: #62acde;
   margin-right: 5px;
+  border: 1px solid #62acde;
+  display: inline-block;
+  cursor: pointer;
 }
 .removeBtn {
   margin-left: auto;
@@ -64,6 +81,7 @@ li {
 }
 .checkBtnCompleted {
   color: #b3adad;
+  border: 1px solid #b3adad;
 }
 .textCompleted {
   text-decoration: line-through;
