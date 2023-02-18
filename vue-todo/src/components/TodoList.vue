@@ -1,8 +1,9 @@
 <template>
   <div>
     <ul>
-      <li v-for="todoItems in todoItems" v-bind:key="todoItems">
+      <li  v-for="(todoItems,index) in todoItems" v-bind:key="todoItems" class="shadow">
         {{ todoItems }}
+        <span class="removeBtn" v-on:click="removeTodo(todoItems,index)">delete</span>
       </li>
     </ul>
   </div>
@@ -13,6 +14,13 @@ export default {
   data: function(){
     return { 
       todoItems: []
+    }
+  },
+  methods: {
+    removeTodo: function(todoItems, index ){
+      console.log(todoItems, index);
+      localStorage.removeItem(todoItems)
+      this.todoItems.splice(index, 1)
     }
   },
   created: function(){
@@ -28,5 +36,38 @@ export default {
 </script>
 
 <style>
+ul {
+  list-style-type: none;
+  padding-left: 0px;
+  margin-top: 0;
+  text-align: left;
+}
+li {
+  display: flex;
+  min-height: 50px;
+  height: 50px;
+  line-height: 50px;
+  margin: .5rem 0;
+  padding: 0 .9rem;
+  background:#fff;
+  border-radius: 5px;
+}
+.ckeckBtn {
+  line-height: 45px;
+  color: #62acde;
+  margin-right: 5px;
+}
+.removeBtn {
+  margin-left: auto;
+  color: #de4343;
+  cursor: pointer;
+}
+.checkBtnCompleted {
+  color: #b3adad;
+}
+.textCompleted {
+  text-decoration: line-through;
+  color: #b3adad;
+}
 
 </style>
