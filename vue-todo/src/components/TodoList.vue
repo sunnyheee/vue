@@ -1,14 +1,24 @@
 <template>
   <div>
     <ul>
-      <li  v-for="(todoItem,index) in todoItems" v-bind:key="todoItem.item" class="shadow">
-        <p class="checkBtn" 
-          v-bind:class="{checkBtnCompleted:todoItem.completed}" 
-          v-on:click="toggleComplte(todoItem,index)">
+      <li
+        v-for="(todoItem, index) in propsdata"
+        v-bind:key="todoItem.item"
+        class="shadow"
+      >
+        <p
+          class="checkBtn"
+          v-bind:class="{ checkBtnCompleted: todoItem.completed }"
+          v-on:click="toggleComplte(todoItem, index)"
+        >
           check
         </p>
-        <span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
-        <span class="removeBtn" v-on:click="removeTodo(todoItem,index)">delete</span>
+        <span v-bind:class="{ textCompleted: todoItem.completed }">{{
+          todoItem.item
+        }}</span>
+        <span class="removeBtn" v-on:click="removeTodo(todoItem, index)"
+          >delete</span
+        >
       </li>
     </ul>
   </div>
@@ -16,37 +26,22 @@
 
 <script>
 export default {
-  data: function(){
-    return { 
-      todoItems: []
-    }
-  },
+  props: ["propsdata"],
   methods: {
-    removeTodo: function(todoItem, index ){
+    removeTodo: function (todoItem, index) {
       console.log(todoItem, index);
-      localStorage.removeItem(todoItem)
-      this.todoItems.splice(index, 1)
+      localStorage.removeItem(todoItem);
+      this.todoItems.splice(index, 1);
     },
-    toggleComplte: function(todoItem,index){
+    toggleComplte: function (todoItem, index) {
       console.log(todoItem, index);
       todoItem.completed = !todoItem.completed;
       // localStorage deta update
-      localStorage.removeItem(todoItem.item)
-      localStorage.setItem(todoItem.item, JSON.stringify(todoItem))
-    }
+      localStorage.removeItem(todoItem.item);
+      localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
+    },
   },
-  created: function(){
-    if(localStorage.length > 0){
-      for(var i = 0; i < localStorage.length; i++){
-        if(localStorage.key(i) !== "logolevel:webpack-dev-server")
-        this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))))
-        console.log(JSON.parse(localStorage.getItem(localStorage.key(i))));
-        // this.todoItems.push(localStorage.key(i))
-        // console.log(localStorage.key(i));
-      }
-    }  
-  }
-}
+};
 </script>
 
 <style scoped>
@@ -61,9 +56,9 @@ li {
   min-height: 50px;
   height: 50px;
   line-height: 50px;
-  margin: .5rem 0;
-  padding: 0 .9rem;
-  background:#fff;
+  margin: 0.5rem 0;
+  padding: 0 0.9rem;
+  background: #fff;
   border-radius: 5px;
 }
 .checkBtn {
@@ -87,5 +82,4 @@ li {
   text-decoration: line-through;
   color: #b3adad;
 }
-
 </style>
