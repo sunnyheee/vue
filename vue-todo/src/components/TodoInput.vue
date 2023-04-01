@@ -4,14 +4,24 @@
     <span class="addContainer" v-on:click="addTodo">
       <i>+</i>
     </span>
+    <AlertModal v-if="showModal" @close="showModal = false">
+      <h3 slot="header">
+        warning!
+        <span class="closeModalBtn" @click="showModal = false">X</span>
+      </h3>
+      <div slot="body">You haven't entered anything</div>
+    </AlertModal>
   </div>
 </template>
 
 <script>
+import AlertModal from "./common/AlertModal.vue";
+
 export default {
   data: function () {
     return {
       newTodoItem: "",
+      showModal: false,
     };
   },
   methods: {
@@ -22,11 +32,16 @@ export default {
       if (this.newTodoItem !== "") {
         this.$emit("addTodoItem", this.newTodoItem);
         this.clearInput();
+      } else {
+        this.showModal = !this.showModal;
       }
     },
     clearInput: function () {
       this, (this.newTodoItem = "");
     },
+  },
+  components: {
+    AlertModal: AlertModal,
   },
 };
 </script>
